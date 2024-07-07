@@ -1,6 +1,12 @@
-from pdf2image import convert_from_path
+import cv2
+import numpy as np
 import os
+from pdf2image import convert_from_path
+import shutil
 
+shutil.rmtree('ex')
+
+# Функция для конвертации PDF в изображения
 def convert_pdf_to_images(pdf_path, output_folder):
     os.makedirs(output_folder, exist_ok=True)
     pages = convert_from_path(pdf_path, dpi=300)  # Увеличьте dpi для лучшего качества
@@ -10,33 +16,41 @@ def convert_pdf_to_images(pdf_path, output_folder):
         page.save(image_filename, "JPEG")
         print(f"Saved page {i + 1} as image to {image_filename}")
 
-# Пример использования
-pdf_path = "Перечень обозначений электрических схем на чертеже.pdf"  # Укажите путь к вашему PDF-документу
-output_folder = "folder_with_extracted_pictures"  # Укажите выходную папку
-convert_pdf_to_images(pdf_path, output_folder)
-
-import cv2
-import numpy as np
-import os
-
+# Функция для обработки изображения и выделения ячеек таблицы
 def process_image(image_path, output_folder, filename):
     image = cv2.imread(image_path)
     if image is None:
         print(f"Could not read image {image_path}. Skipping...")
         return
 
-    # Преобразование изображения в оттенки серого
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # Определяем размеры изображения
+    height, width, _ = image.shape
 
-    # Применение адаптивного порога для выделения объектов
-    binary = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 11, 15)
+    # Вырезаем область интереса (ваша колонка 2)
+    column2_left = width // 2
+    column2_right = width
+
+    # Определяем границы области интереса (ширина влево от колонки 2)
+    left_extension = 100  # 170 Пример: расширяем на 100 пикселей влево от колонки 2
+    right_extension = 900 # 1600
+    roi_left = max(0, column2_left - left_extension)
+    roi_right = column2_right - right_extension
+
+    # Вырезаем область интереса
+    roi = image[0:height, roi_left:roi_right]
+
+    # Преобразование изображения в оттенки серого
+    gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+
+    # Применение порогового преобразования для выделения контуров
+    _, binary = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
     # Применение морфологических операций для удаления мелких объектов
-    kernel = np.ones((3, 3), np.uint8)
-    opening = cv2.morphologyEx(binary, cv2.MORPH_OPEN, kernel, iterations=2)
+    kernel = np.ones((2, 2), np.uint8)
+    closing = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel, iterations=2)
 
-    # Поиск контуров
-    contours, _ = cv2.findContours(opening, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # Поиск контуров для выделения ячеек таблицы
+    contours, _ = cv2.findContours(closing, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     # Создание уникальной подпапки для каждого исходного изображения
     image_output_folder = os.path.join(output_folder, os.path.splitext(filename)[0])
@@ -47,19 +61,20 @@ def process_image(image_path, output_folder, filename):
         x, y, w, h = cv2.boundingRect(contour)
 
         # Отфильтруем объекты по их размеру и соотношению сторон
-        if w > 100 and h > 100 and 0.5 < w / h < 2.0:
-            padding = 20  # Добавляемое пространство вокруг контура
+        if w > 50 and h > 50:
+            padding = 10  # Добавляемое пространство вокруг контура
             x = max(0, x - padding)
             y = max(0, y - padding)
-            w = min(image.shape[1] - x, w + 2 * padding)
-            h = min(image.shape[0] - y, h + 2 * padding)
+            w = min(roi.shape[1] - x, w + 2 * padding)
+            h = min(roi.shape[0] - y, h + 2 * padding)
 
-            roi = image[y:y + h, x:x + w]
+            object_roi = roi[y:y + h, x:x + w]
             object_filename = os.path.join(image_output_folder, f"{os.path.splitext(filename)[0]}_obj_{i + 1}.png")
-            cv2.imwrite(object_filename, roi)
+            cv2.imwrite(object_filename, object_roi)
             print(f"Saved object {i + 1} from {filename} to {object_filename}")
 
 
+# Функция для извлечения объектов из изображений
 def extract_objects_from_images(input_folder, output_folder):
     os.makedirs(output_folder, exist_ok=True)
 
@@ -69,7 +84,10 @@ def extract_objects_from_images(input_folder, output_folder):
             process_image(image_path, output_folder, filename)
 
 # Пример использования
-input_folder = "folder_with_extracted_pictures"  # Замените на ваш путь к папке с изображениями
-output_folder = "ex"  # Папка для сохранения извлечённых объектов
+pdf_path = "Перечень обозначений электрических схем на чертеже.pdf"  # Укажите путь к вашему PDF-документу
+output_folder_images = "folder_with_extracted_pictures"  # Укажите выходную папку для изображений
+convert_pdf_to_images(pdf_path, output_folder_images)
 
-extract_objects_from_images(input_folder, output_folder)
+input_folder_images = "folder_with_extracted_pictures"  # Путь к папке с изображениями
+output_folder_objects = "ex"  # Папка для сохранения извлечённых объектов
+extract_objects_from_images(input_folder_images, output_folder_objects)
