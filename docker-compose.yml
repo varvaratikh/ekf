@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  flask-app:
+    build: ./flask_server
+    ports:
+      - "5010:5000"
+
+  backend_java:
+    build: ./backend_java
+    environment:
+      - flask.server.url=http://flask-app:5000
+    ports:
+      - "8090:8090"
+    depends_on:
+      - flask-app
