@@ -1,0 +1,26 @@
+import React from 'react';
+import Header from './components/Header';
+import Login from './components/Login';
+import Register from './components/Register';
+import FileUpload from './components/FileUpload';
+import FileList from './components/FileList';
+import PredictionForm from './components/PredictionForm';
+import DownloadCSV from './components/DownloadCSV';
+
+const App = () => {
+    return (
+        <div className="container mx-auto p-4">
+            <Header />
+            <main>
+                <Login />
+                <Register />
+                <FileUpload />
+                <FileList />
+                <PredictionForm />
+                <DownloadCSV />
+            </main>
+        </div>
+    );
+};
+
+export default App;
