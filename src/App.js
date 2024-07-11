@@ -7,6 +7,9 @@ import FileList from './components/FileList';
 import PredictionForm from './components/PredictionForm';
 import DownloadCSV from './components/DownloadCSV';
 
+import ImageUploadPage from './pages/ImageUploadPage';
+
+
 const App = () => {
     return (
         <div className="container mx-auto p-4">
@@ -18,6 +21,7 @@ const App = () => {
                 <FileList />
                 <PredictionForm />
                 <DownloadCSV />
+                {/*<ImageUploadPage />*/}
             </main>
         </div>
     );

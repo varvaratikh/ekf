@@ -20,7 +20,8 @@
   "homepage": "https://github.com/ErokhinE/EKF_AI#readme",
   "dependencies": {
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-dropzone": "^14.2.3"
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",
