@@ -1,34 +1,34 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
-import Header from './components/Header';
-import Login from './components/Login';
-import Register from './components/Register';
-import FileUpload from './components/FileUpload';
-import FileList from './components/FileList';
-import PredictionForm from './components/PredictionForm';
-import DownloadCSV from './components/DownloadCSV';
-
 import ImageUploadPage from './pages/ImageUploadPage';
 import GreetingPage from "./pages/GreetingPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ImageEditing from "./pages/ImageEditing";
 import ImageEditingPage from "./pages/ImageEditing";
+import DownloadCSV from "./components/DownloadCSV";
+import EnterButton from "./components/EnterButton";
+import RedRegisterButton from "./components/RedRegisterButton";
+import RegisterButton from "./components/RegisterButton";
+import Header from "./components/Header";
+import SendButton from "./components/SendButton";
+import RedSendButton from "./components/RedSendButton";
+import EnterForm from "./components/EnterForm";
 
 
 const App = () => {
     return (
         <div className="container mx-auto font-sans">
-            {/*<Header />*/}
+            <Header />
             <main>
-                {/*<Login />*/}
-                {/*<Register />*/}
-                {/*<FileUpload />*/}
-                {/*<FileList />*/}
-                {/*<PredictionForm />*/}
+                {/*<DownloadCSV/>*/}
+                {/*<EnterButton/>*/}
+                {/*<RedRegisterButton/>*/}
+                {/*<RegisterButton/>*/}
+                {/*<SendButton/>*/}
+                {/*<RedSendButton/>*/}
+                {/*<EnterForm/>*/}
                 {/*<DownloadCSV />*/}
-                {/*<ImageUploadPage />*/}
                 <Router>
                     <Routes>
                         {/*<Route path="/" element={<GreetingPage />} />*/}
