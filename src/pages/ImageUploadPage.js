@@ -10,12 +10,8 @@ const FileUploadPage = () => {
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-white">
-            <header className="bg-gray-800 py-4 flex justify-center items-center w-full">
-                <img src="../images/logo.png" alt="logo" className="h-12 mr-4" />
-                <h1 className="text-white text-xl">EKF</h1>
-            </header>
-            <div {...getRootProps({ className: 'dropzone' })} className="w-96 h-72 border-2 border-dashed border-red-500 flex items-center justify-center mt-8 mb-6">
+        <div className="flex flex-col items-center justify-center h-screen bg-white text-custom-black">
+            <div {...getRootProps({ className: 'dropzone' })} className={`w-4/6 h-1/2 border-2 border-dashed ${isDragActive ? 'border-custom-red' : 'border-custom-blue'} flex items-center justify-center mt-8 mb-20`}>
                 <input {...getInputProps()} />
                 {
                     isDragActive ?
@@ -23,7 +19,7 @@ const FileUploadPage = () => {
                         <p>Выбрать файл</p>
                 }
             </div>
-            <button className="bg-gray-300 py-2 px-4 rounded">Отправить</button>
+            <button className="bg-custom-grey py-2 px-40">Отправить</button>
         </div>
     );
 };

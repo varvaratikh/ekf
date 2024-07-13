@@ -12,16 +12,16 @@ import ImageUploadPage from './pages/ImageUploadPage';
 
 const App = () => {
     return (
-        <div className="container mx-auto p-4">
-            <Header />
+        <div className="container mx-auto p-4 font-sans">
+            {/*<Header />*/}
             <main>
-                <Login />
-                <Register />
-                <FileUpload />
-                <FileList />
-                <PredictionForm />
-                <DownloadCSV />
-                {/*<ImageUploadPage />*/}
+                {/*<Login />*/}
+                {/*<Register />*/}
+                {/*<FileUpload />*/}
+                {/*<FileList />*/}
+                {/*<PredictionForm />*/}
+                {/*<DownloadCSV />*/}
+                <ImageUploadPage />
             </main>
         </div>
     );
