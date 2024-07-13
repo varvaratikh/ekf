@@ -1,4 +1,3 @@
-// src/components/ColorLabelPicker.js
 import React from 'react';
 
 const ColorLabelPicker = ({ label, options, onChange, selectedOption }) => {

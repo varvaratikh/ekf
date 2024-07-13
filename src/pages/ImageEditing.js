@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import DownloadCSV from "../components/DownloadCSV";
 
 const ImageEditingPage = () => {
     const location = useLocation();
@@ -14,7 +15,7 @@ console.log(image)
                     <p>No image uploaded</p>
                 )}
             </div>
-            <button className="bg-custom-red py-2 px-40">Скачать .csv</button>
+            <DownloadCSV/>
         </div>
     );
 };

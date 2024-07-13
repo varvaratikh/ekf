@@ -1,10 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Link } from "react-router-dom";
+import ModalComponent from '../components/Modal';
 
 const ImageUploadPage = () => {
     const [uploadedFile, setUploadedFile] = useState(null);
     const [base64File, setBase64File] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const onDrop = useCallback((acceptedFiles) => {
         if (acceptedFiles.length > 1) {
@@ -31,8 +33,25 @@ const ImageUploadPage = () => {
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, accept: 'image/*' });
 
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
     return (
-        <div className="flex flex-col items-center justify-center h-screen text-custom-black font-semibold text-lg">
+        <div className="relative flex flex-col items-center justify-center h-screen text-custom-black font-semibold text-lg">
+            <div className="absolute top-4 right-4">
+                <img
+                    src="src/images/Burger.png"
+                    alt="Open Modal"
+                    className="w-10 h-10 cursor-pointer"
+                    onClick={openModal}
+                />
+            </div>
+
             {uploadedFile ? (
                 <div className="w-4/6 h-1/2 flex flex-col items-center justify-center mt-8 mb-20">
                     <div className="relative">
@@ -63,6 +82,8 @@ const ImageUploadPage = () => {
                 pathname: "/editing",
                 state: { image: base64File }
             }} className="bg-custom-grey py-2 px-40">Отправить</Link>
+
+            <ModalComponent isOpen={isModalOpen} onRequestClose={closeModal} />
         </div>
     );
 };
