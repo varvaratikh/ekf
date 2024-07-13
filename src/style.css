@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.bg-page {
+    @apply bg-[#F8F8F8];
+}

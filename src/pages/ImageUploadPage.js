@@ -1,7 +1,9 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Link } from "react-router-dom";
-import ModalComponent from '../components/Modal';
+import SideModalComponent from '../components/SideModalComponent';
+import burger from '../images/Burger.png';
+
 
 const ImageUploadPage = () => {
     const [uploadedFile, setUploadedFile] = useState(null);
@@ -45,9 +47,9 @@ const ImageUploadPage = () => {
         <div className="relative flex flex-col items-center justify-center h-screen text-custom-black font-semibold text-lg">
             <div className="absolute top-4 right-4">
                 <img
-                    src="src/images/Burger.png"
+                    src={burger}
                     alt="Open Modal"
-                    className="w-10 h-10 cursor-pointer"
+                    className="w-5 h-5 cursor-pointer"
                     onClick={openModal}
                 />
             </div>
@@ -83,7 +85,7 @@ const ImageUploadPage = () => {
                 state: { image: base64File }
             }} className="bg-custom-grey py-2 px-40">Отправить</Link>
 
-            <ModalComponent isOpen={isModalOpen} onRequestClose={closeModal} />
+            <SideModalComponent isOpen={isModalOpen} onRequestClose={closeModal} />
         </div>
     );
 };
