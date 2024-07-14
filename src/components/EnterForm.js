@@ -23,7 +23,7 @@ const EnterForm = () => {
             setResponse(res.data);
 
             // Navigate to /uploading with the response data
-            if (res.data && res.data.userId === 0) {
+            if (res.data && res.data.userId !== -1) {
                 navigate('/uploading', { state: { response: res.data } });
             }
         } catch (error) {
