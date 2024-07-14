@@ -8,7 +8,8 @@ const ImageEditingPage = () => {
     const location = useLocation();
     const { image, userId, response } = location.state || {};
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [images, setImages] = useState(response?.images || []);
+    const [mp, setMp] = useState(response?.mp || []);
+    const [boxes, setBoxes] = useState(response?.boxes || []);
 
     const handelModal = () => {
         setIsModalOpen(!isModalOpen);
@@ -38,7 +39,7 @@ const ImageEditingPage = () => {
                 </div>
             )}
             <DownloadCSV/>
-            <SideModalComponent isOpen={isModalOpen} onRequestClose={handelModal} images={images} />
+            <SideModalComponent isOpen={isModalOpen} onRequestClose={handelModal} mp={mp} />
         </div>
     );
 };

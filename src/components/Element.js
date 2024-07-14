@@ -25,13 +25,13 @@ const Element = ({ items }) => {
                 <div
                     key={index}
                     onClick={() => handleClick(item)}
-                    className={`flex items-center p-4 my-2 rounded cursor-pointer border ${isSelected(item) ? 'border-black' : 'border-gray-300'}`}
+                    className={`flex items-center p-2 my-2 cursor-pointer border ${isSelected(item) ? 'border-custom-black' : 'border-gray-300'}`}
                 >
                     <div
-                        className="w-6 h-6 mr-2"
-                        style={{ backgroundColor: item.color }}
+                        className="w-4 h-4 mr-2"
+                        style={{ backgroundColor: item.color }} // Set default color to red
                     />
-                    <div className="flex-1">
+                    <div className="flex-1 text-sm">
                         {item.text}
                     </div>
                 </div>

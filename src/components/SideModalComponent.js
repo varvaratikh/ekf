@@ -1,6 +1,13 @@
 import React from 'react';
+import Element from '../components/Element';
 
-const SideModalComponent = ({ isOpen, onRequestClose, images }) => {
+const SideModalComponent = ({ isOpen, onRequestClose, mp }) => {
+    // Generate items based on the mp object
+    const items = mp ? Object.entries(mp).map(([key, value]) => ({
+        color: 'red', // Set default color to red
+        text: `${key}: ${value}`
+    })) : [];
+
     return (
         <div className={`fixed top-10 right-0 bg-white shadow-lg transition-transform duration-300 
       ${isOpen ? 'translate-x-0' : 'translate-x-full'}`} style={{ width: '278px', height: '700px', margin: `10px ${isOpen ? '20px' : '0'}`, overflowY: 'auto' }}>
@@ -13,15 +20,10 @@ const SideModalComponent = ({ isOpen, onRequestClose, images }) => {
                     </button>
                 </div>
                 <div className="flex-grow">
-                    {images.map((img, index) => (
-                        <div key={index} className="mb-4">
-                            <img src={img.image[0]} alt={`Uploaded on ${img.timestamp}`} className="w-full h-auto" />
-                            <p className="text-sm text-gray-500">{img.timestamp}</p>
-                        </div>
-                    ))}
+                    <Element items={items} />
                 </div>
                 <div className="flex justify-center mt-auto">
-                    <button className="bg-custom-grey text-custom-black py-2 px-4 mt-4">Добавить элемент</button>
+                    <button className="absolute bottom-0 mb-4 p-2 bg-custom-grey text-custom-black">Добавить элемент</button>
                 </div>
             </div>
         </div>
