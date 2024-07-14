@@ -2,8 +2,8 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
-import SideModalComponent from '../components/SideModalComponent';
 import burger from '../images/Burger.png';
+import HistoryModalComponent from "../components/HistoryModalComponent";
 
 const ImageUploadPage = () => {
     const [uploadedFile, setUploadedFile] = useState(null);
@@ -25,7 +25,7 @@ const ImageUploadPage = () => {
 
     const onDrop = useCallback((acceptedFiles) => {
         if (acceptedFiles.length > 1) {
-            alert('Please select only 1 file.');
+            alert('Пожалуйства, выберите 1 файл.');
             return;
         }
 
@@ -47,12 +47,8 @@ const ImageUploadPage = () => {
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, accept: 'image/*' });
 
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
+    const handelModal = () => {
+        setIsModalOpen(!isModalOpen);
     };
 
     const handleSend = async () => {
@@ -60,13 +56,18 @@ const ImageUploadPage = () => {
         console.log('Base64 File:', base64File);
 
         if (!base64File) {
-            alert('Please upload a file first.');
+            alert('Пожалуйста, загрузите файл.');
             return;
         }
 
+        const formData = new FormData();
+        formData.append('image', uploadedFile);
+
         try {
-            const response = await axios.post('http://5a02-57-129-1-195.ngrok-free.app/image', {
-                image: base64File
+            const response = await axios.post('https://193.124.33.166:8091/image', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             });
 
             if (response.status === 200) {
@@ -87,7 +88,7 @@ const ImageUploadPage = () => {
                     src={burger}
                     alt="Open Modal"
                     className="w-8 h-5 cursor-pointer"
-                    onClick={openModal}
+                    onClick={handelModal}
                 />
             </div>
             {uploadedFile ? (
@@ -111,15 +112,15 @@ const ImageUploadPage = () => {
                     <input {...getInputProps()} />
                     {
                         isDragActive ?
-                            <p>Drop the file here...</p> :
-                            <p>Select a file</p>
+                            <p>Отпустите файл здесь...</p> :
+                            <p>Выберите файл</p>
                     }
                 </div>
             )}
 
             <button onClick={handleSend} className="bg-custom-grey py-2 px-40 cursor-pointer mb-10">Отправить</button>
 
-            <SideModalComponent isOpen={isModalOpen} onRequestClose={closeModal} images={images} />
+            <HistoryModalComponent isOpen={isModalOpen} onRequestClose={handelModal} images={images} />
         </div>
     );
 };

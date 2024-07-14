@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SideModalComponent = ({ isOpen, onRequestClose, images }) => {
+const HistoryModalComponent = ({ isOpen, onRequestClose, images }) => {
     return (
         <div className={`fixed top-10 right-0 bg-white shadow-lg transition-transform duration-300 
       ${isOpen ? 'translate-x-0' : 'translate-x-full'}`} style={{ width: '278px', height: '700px', margin: `10px ${isOpen ? '20px' : '0'}`, overflowY: 'auto' }}>
@@ -20,12 +20,9 @@ const SideModalComponent = ({ isOpen, onRequestClose, images }) => {
                         </div>
                     ))}
                 </div>
-                <div className="flex justify-center mt-auto">
-                    <button className="bg-custom-grey text-custom-black py-2 px-4 mt-4">Добавить элемент</button>
-                </div>
             </div>
         </div>
     );
 };
 
-export default SideModalComponent;
+export default HistoryModalComponent;

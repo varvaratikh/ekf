@@ -10,12 +10,8 @@ const ImageEditingPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [images, setImages] = useState(response?.images || []);
 
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
+    const handelModal = () => {
+        setIsModalOpen(!isModalOpen);
     };
 
     return (
@@ -25,7 +21,7 @@ const ImageEditingPage = () => {
                     src={burger}
                     alt="Open Modal"
                     className="w-8 h-5 cursor-pointer"
-                    onClick={openModal}
+                    onClick={handelModal}
                 />
             </div>
             {image ? (
@@ -42,7 +38,7 @@ const ImageEditingPage = () => {
                 </div>
             )}
             <DownloadCSV/>
-            <SideModalComponent isOpen={isModalOpen} onRequestClose={closeModal} images={images} />
+            <SideModalComponent isOpen={isModalOpen} onRequestClose={handelModal} images={images} />
         </div>
     );
 };

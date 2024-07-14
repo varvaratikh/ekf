@@ -11,13 +11,17 @@ const EnterForm = () => {
 
     const handleLogin = async (event) => {
         event.preventDefault();
-        const url = `http://5a02-57-129-1-195.ngrok-free.app/users/login`;
+        const url = `https://193.124.33.166:8091/users/login`;
 
         try {
             const res = await axios.post(url, null, {
                 params: {
                     username: email,
                     password: password
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
                 }
             });
             setResponse(res.data);
