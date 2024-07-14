@@ -21,10 +21,10 @@ const App = () => {
     return (
         <div className="bg-page">
             <div className="container mx-auto font-sans">
-                <Header />
                 <SideModalOneElement isOpen={isOneElementModalOpen} onRequestClose={handleOneElementModal} />
                 <main>
                     <Router>
+                        <Header />
                         <Routes>
                             <Route path="/" element={<GreetingPage />} />
                             <Route path="/login" element={<LoginPage />} />

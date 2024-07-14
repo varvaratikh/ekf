@@ -9,8 +9,8 @@ const GreetingPage = () => {
                 Прогнозирование коммерческого <br /> предложения
             </h1>
             <div className="flex flex-col items-center space-y-4 mt-10">
-                <EnterButton />
-                <RegisterButton />
+                <EnterButton/>
+                <RegisterButton/>
             </div>
             <p className="absolute bottom-0 right-0 mb-4 mr-4 text-custom-team-logo text-lg font-semibold">
                 Hackoholics
