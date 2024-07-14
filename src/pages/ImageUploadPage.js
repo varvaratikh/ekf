@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { useLocation, Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
+import axios from 'axios'; // Import Axios
 import SideModalComponent from '../components/SideModalComponent';
 import burger from '../images/Burger.png';
 
@@ -10,7 +11,7 @@ const ImageUploadPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [userId, setUserId] = useState(null);
     const [images, setImages] = useState([]);
-    const navigate = useNavigate(); // Initialize navigate from useNavigate()
+    const navigate = useNavigate();
 
     const location = useLocation();
 
@@ -33,7 +34,6 @@ const ImageUploadPage = () => {
 
         const reader = new FileReader();
         reader.onloadend = () => {
-            console.log(reader.result);
             setBase64File(reader.result);
         };
 
@@ -55,8 +55,22 @@ const ImageUploadPage = () => {
         setIsModalOpen(false);
     };
 
-    const handleSend = () => {
-        navigate('/editing', { state: { image: base64File } });
+    const handleSend = async () => {
+        try {
+            const response = await axios.post('http://5a02-57-129-1-195.ngrok-free.app/image', {
+                image: base64File
+            });
+
+            if (response.status === 200) {
+                // Navigate to /editing with image and response data
+                navigate('/editing', { state: { image: base64File, userId, response: response.data } });
+            } else {
+                console.error('Request failed:', response);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle error, show message, etc.
+        }
     };
 
     return (
@@ -97,8 +111,8 @@ const ImageUploadPage = () => {
                 </div>
             )}
 
-            {/* Updated Link to use navigate */}
-            <button onClick={handleSend} className="bg-custom-grey py-2 px-40 cursor-pointer">Send</button>
+            {/* Updated Button to call handleSend */}
+            <button onClick={handleSend} className="bg-custom-grey py-2 px-40 cursor-pointer">Отправить</button>
 
             <SideModalComponent isOpen={isModalOpen} onRequestClose={closeModal} images={images} />
         </div>

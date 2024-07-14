@@ -4,8 +4,8 @@ import DownloadCSV from "../components/DownloadCSV";
 
 const ImageEditingPage = () => {
     const location = useLocation();
-    const { image } = location.state || {}; // Fallback to avoid destructuring undefined
-console.log(image)
+    const { image, userId, response } = location.state || {}; // Destructure image, userId, and response
+
     return (
         <div className="flex flex-col items-center justify-center h-screen text-custom-black font-semibold text-lg">
             <div className="w-4/6 h-1/2 flex flex-col items-center justify-center mt-8 mb-20">
@@ -15,6 +15,13 @@ console.log(image)
                     <p>No image uploaded</p>
                 )}
             </div>
+            {userId && response && ( // Check if userId and response are truthy
+                <div>
+                    <p>User ID: {userId}</p>
+                    {/* Display other response data as needed */}
+                    <pre>{JSON.stringify(response, null, 2)}</pre>
+                </div>
+            )}
             <DownloadCSV/>
         </div>
     );
