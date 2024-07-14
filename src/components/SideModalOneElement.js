@@ -12,10 +12,10 @@ const SideModalComponent = ({ isOpen, onRequestClose }) => {
 
     return (
         <div className={`fixed top-1/2 left-0 transform -translate-y-1/2 bg-white shadow-lg transition-transform duration-300 
-            ${isOpen ? 'translate-x-0' : '-translate-x-full'}`} style={{ width: '278px', margin: '0 20px', padding: '20px' }}>
+            ${isOpen ? 'translate-x-0' : '-translate-x-full'}`} style={{ width: '278px', margin: `0 ${isOpen ? '20px' : '0'}`, padding: '20px' }}>
             <div className="flex flex-col h-full">
                 <div className="mt-4">
-                    <h3 className="text-black font-bold">название:</h3>
+                    <h3 className="text-custom-black font-bold">название:</h3>
                     <input
                         className="mt-2 border border-gray-300 rounded p-2 w-full"
                         value={title}
@@ -23,10 +23,10 @@ const SideModalComponent = ({ isOpen, onRequestClose }) => {
                     />
                 </div>
                 <div className="mt-4">
-                    <h3 className="text-black font-bold">категория:</h3>
+                    <h3 className="text-custom-black font-bold">категория:</h3>
                     <div className="mt-2 border border-gray-300 rounded p-2 relative">
                         <div
-                            className="p-2 cursor-pointer bg-gray-200"
+                            className="p-2 cursor-pointer bg-custom-wight"
                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                         >
                             {selectedCategory || 'Выберите категорию'}
@@ -36,7 +36,7 @@ const SideModalComponent = ({ isOpen, onRequestClose }) => {
                                 {['Фаза A', 'Фаза B', 'Фаза C'].map((category) => (
                                     <div
                                         key={category}
-                                        className={`p-2 cursor-pointer ${selectedCategory === category ? 'bg-gray-200' : ''}`}
+                                        className={`p-2 cursor-pointer ${selectedCategory === category ? 'bg-custom-grey' : ''}`}
                                         onClick={() => handleCategoryChange(category)}
                                     >
                                         {category}
@@ -47,8 +47,8 @@ const SideModalComponent = ({ isOpen, onRequestClose }) => {
                     </div>
                 </div>
                 <div className="mt-auto flex flex-col items-center">
-                    <button className="bg-red-500 text-white py-3 px-4 mt-4 w-full">Сохранить</button>
-                    <button className="bg-gray-100 text-black py-3 px-4 mt-2 w-full">Удалить</button>
+                    <button className="bg-custom-red text-custom-wight py-2 px-4 mt-4 w-full">Сохранить</button>
+                    <button className="bg-custom-grey text-custom-black py-2 px-4 mt-2 w-full">Удалить</button>
                 </div>
             </div>
         </div>

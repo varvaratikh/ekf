@@ -9,7 +9,7 @@ const RegisterButton = () => {
             <button
                 onClick={() => navigate('/register')}
                 type="button"
-                className="bg-[#EAECEF] text-black font-bold w-[335px] h-[44px] text-[20px]"
+                className="bg-custom-grey text-custom-black font-bold w-[335px] h-[44px] text-[20px]"
             >
                 Зарегистрироваться
             </button>

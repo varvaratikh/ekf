@@ -9,7 +9,7 @@ const RedRegisterButton = () => {
             <button
                 onClick={() => navigate('/uploading')}
                 type="button"
-                className="bg-[#DB0912] text-white font-bold w-[335px] h-[44px] text-[20px]">
+                className="bg-custom-red text-custom-wight font-bold w-[335px] h-[44px] text-[20px]">
                 Зарегистрироваться
             </button>
         </div>
