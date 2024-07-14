@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-.bg-page {
-    @apply bg-[#F8F8F8];
+* {
+    box-sizing: border-box;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
 }

@@ -49,7 +49,7 @@ const ImageUploadPage = () => {
                 <img
                     src={burger}
                     alt="Open Modal"
-                    className="w-5 h-5 cursor-pointer"
+                    className="w-8 h-5 cursor-pointer"
                     onClick={openModal}
                 />
             </div>

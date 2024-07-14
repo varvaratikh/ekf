@@ -15,29 +15,33 @@ import SideModalOneElement from "./components/SideModalOneElement";
 
 
 const App = () => {
-    const [isModalOpen, setIsModalOpen] = useState(true);
+    const [isOneElementModalOpen, setOneElementIsModalOpen] = useState(false);
+    const [isAllElementsModalOpen, setAllElementsIsModalOpen] = useState(false);
 
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
+    const handleOneElementModal = () => {
+        setOneElementIsModalOpen(!isOneElementModalOpen);
     };
 
+    const handleAllElementsModal = () => {
+        setAllElementsIsModalOpen(!isAllElementsModalOpen);
+    };
 
     return (
-        <div className="bg-page min-h-screen">
+        <div className="bg-page">
             <div className="container mx-auto font-sans">
                 <Header />
-                <SideModalOneElement isOpen={isModalOpen} onRequestClose={handleCloseModal} />
+                <SideModalOneElement isOpen={isOneElementModalOpen} onRequestClose={handleOneElementModal} />
+                {/*<AllElements isOpen={isAllElementsModalOpen} onRequestClose={handleAllElementsModal} />*/}
                 <main>
-                    {/*<Router>*/}
-                    {/*    <Routes>*/}
-                    {/*        <Route path="/hello" element={<GreetingPage />} />*/}
-                    {/*        <Route path="/" element={<AllElements />} />*/}
-                    {/*        <Route path="/login" element={<LoginPage />} />*/}
-                    {/*        <Route path="/register" element={<RegisterPage />} />*/}
-                    {/*        <Route path="/uploading" element={<ImageUploadPage />} />*/}
-                    {/*        <Route path="/editing" element={<ImageEditingPage />} />*/}
-                    {/*    </Routes>*/}
-                    {/*</Router>*/}
+                    <Router>
+                        <Routes>
+                            <Route path="/" element={<GreetingPage />} />
+                            <Route path="/login" element={<LoginPage />} />
+                            <Route path="/register" element={<RegisterPage />} />
+                            <Route path="/uploading" element={<ImageUploadPage />} />
+                            <Route path="/editing" element={<ImageEditingPage />} />
+                        </Routes>
+                    </Router>
                 </main>
             </div>
         </div>

@@ -14,7 +14,7 @@ const LoginPage = () => {
                     <EnterButton />
                 </div>
             </div>
-            <p className="absolute bottom-0 right-0 mb-4 mr-2 text-custom-team-logo text-lg font-semibold">
+            <p className="absolute bottom-0 right-0 mb-4 mr-4 text-custom-team-logo text-lg font-semibold">
                 Hackoholics
             </p>
         </div>
