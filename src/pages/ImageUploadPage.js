@@ -82,7 +82,7 @@ const ImageUploadPage = () => {
 
     return (
         <div className="relative flex flex-col items-center justify-center h-screen text-custom-black font-semibold text-lg">
-            <div className="absolute top-4 right-4">
+            <div className="absolute top-2 right-1">
                 <img
                     src={burger}
                     alt="Open Modal"
@@ -90,7 +90,6 @@ const ImageUploadPage = () => {
                     onClick={openModal}
                 />
             </div>
-
             {uploadedFile ? (
                 <div className="w-4/6 flex flex-col items-center justify-center mt-8 mb-10">
                     <div className="relative">
