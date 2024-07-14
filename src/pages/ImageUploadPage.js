@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
-import axios from 'axios'; // Import Axios
+import axios from 'axios';
 import SideModalComponent from '../components/SideModalComponent';
 import burger from '../images/Burger.png';
 
@@ -56,20 +56,27 @@ const ImageUploadPage = () => {
     };
 
     const handleSend = async () => {
+        console.log('Sending image...');
+        console.log('Base64 File:', base64File);
+
+        if (!base64File) {
+            alert('Please upload a file first.');
+            return;
+        }
+
         try {
             const response = await axios.post('http://5a02-57-129-1-195.ngrok-free.app/image', {
                 image: base64File
             });
 
             if (response.status === 200) {
-                // Navigate to /editing with image and response data
+                console.log('Response:', response.data);
                 navigate('/editing', { state: { image: base64File, userId, response: response.data } });
             } else {
                 console.error('Request failed:', response);
             }
         } catch (error) {
             console.error('Error:', error);
-            // Handle error, show message, etc.
         }
     };
 
@@ -85,7 +92,7 @@ const ImageUploadPage = () => {
             </div>
 
             {uploadedFile ? (
-                <div className="w-4/6 h-1/2 flex flex-col items-center justify-center mt-8 mb-20">
+                <div className="w-4/6 flex flex-col items-center justify-center mt-8 mb-10">
                     <div className="relative">
                         <button
                             className="absolute top-0 right-0 mt-2 mr-2 p-1"
@@ -95,12 +102,12 @@ const ImageUploadPage = () => {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
-                        <img src={URL.createObjectURL(uploadedFile)} alt="Uploaded file" className="max-h-2/5" />
+                        <img src={URL.createObjectURL(uploadedFile)} alt="Uploaded file" className="max-h-[70vh] max-w-full object-contain" />
                     </div>
                 </div>
             ) : (
                 <div {...getRootProps({ className: 'dropzone' })} className={`w-4/6 h-1/2 border-3 border-dashed 
-          ${isDragActive ? 'border-custom-red' : 'border-custom-blue'} flex items-center justify-center mt-8 mb-20 
+          ${isDragActive ? 'border-custom-red' : 'border-custom-blue'} flex items-center justify-center mt-8 mb-10 
           border-custom-blue hover:border-custom-red hover:cursor-pointer`}>
                     <input {...getInputProps()} />
                     {
@@ -111,8 +118,7 @@ const ImageUploadPage = () => {
                 </div>
             )}
 
-            {/* Updated Button to call handleSend */}
-            <button onClick={handleSend} className="bg-custom-grey py-2 px-40 cursor-pointer">Отправить</button>
+            <button onClick={handleSend} className="bg-custom-grey py-2 px-40 cursor-pointer mb-10">Отправить</button>
 
             <SideModalComponent isOpen={isModalOpen} onRequestClose={closeModal} images={images} />
         </div>
