@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const SideModalComponent = ({ isOpen, onRequestClose }) => {
+const SideModalOneComponent = ({ isOpen, onRequestClose }) => {
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [title, setTitle] = useState('Каркас BPY-2 Unit S сварной IP31 (2000x800x450) EKF PROxima');
@@ -55,4 +55,4 @@ const SideModalComponent = ({ isOpen, onRequestClose }) => {
     );
 };
 
-export default SideModalComponent;
+export default SideModalOneComponent;

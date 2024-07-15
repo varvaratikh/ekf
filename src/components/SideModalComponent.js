@@ -1,9 +1,9 @@
 import React from 'react';
 import Element from '../components/Element';
 
-const SideModalComponent = ({ isOpen, onRequestClose, mp }) => {
+const SideModalComponent = ({ isOpen, onRequestClose, mp, selectedBox, onBoxUpdate, onBoxDelete, onAddElement }) => {
     // Generate items based on the mp object
-    const items = mp ? Object.entries(mp).map(([key, value]) => ({
+    const items = mp ? Object.entries(mp).map(([key, value], index) => ({
         color: 'red', // Set default color to red
         text: `${key}: ${value}`
     })) : [];
@@ -23,7 +23,12 @@ const SideModalComponent = ({ isOpen, onRequestClose, mp }) => {
                     <Element items={items} />
                 </div>
                 <div className="flex justify-center mt-auto">
-                    <button className="absolute bottom-0 mb-4 p-2 bg-custom-grey text-custom-black">Добавить элемент</button>
+                    <button
+                        className="absolute bottom-0 mb-4 p-2 bg-custom-grey text-custom-black"
+                        onClick={onAddElement}
+                    >
+                        Добавить элемент
+                    </button>
                 </div>
             </div>
         </div>
