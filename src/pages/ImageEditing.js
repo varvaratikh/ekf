@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Stage, Layer, Rect } from 'react-konva';
 import DownloadCSV from "../components/DownloadCSV";
 import SideModalComponent from '../components/SideModalComponent';
 import burger from '../images/Burger.png';
