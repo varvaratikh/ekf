@@ -11,7 +11,7 @@ const RegisterForm = () => {
 
     const handleRegister = async (event) => {
         event.preventDefault();
-        const url = `https://193.124.33.166:8091/users/register`;
+        const url = `https://193.124.33.166:8094/users/register`;
 
         try {
             const res = await axios.post(url, null, {

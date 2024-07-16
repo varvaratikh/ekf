@@ -64,7 +64,7 @@ const ImageUploadPage = () => {
         formData.append('image', uploadedFile);
 
         try {
-            const response = await axios.post('https://193.124.33.166:8091/image', formData, {
+            const response = await axios.post('https://193.124.33.166:8094/image', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

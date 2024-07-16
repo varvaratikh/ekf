@@ -7,7 +7,7 @@ const SideModalComponent = ({ isOpen, onRequestClose, mp, selectedBox, onBoxUpda
         color: 'red', // Set default color to red
         text: `${key}: ${value}`
     })) : [];
-
+console.log(mp)
     return (
         <div className={`fixed top-10 right-0 bg-white shadow-lg transition-transform duration-300 
       ${isOpen ? 'translate-x-0' : 'translate-x-full'}`} style={{ width: '278px', height: '700px', margin: `10px ${isOpen ? '20px' : '0'}`, overflowY: 'auto' }}>

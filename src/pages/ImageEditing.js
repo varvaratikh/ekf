@@ -8,7 +8,7 @@ const ImageEditing = () => {
     const location = useLocation();
     const { image, userId, response } = location.state || {};
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [mp, setMp] = useState(response?.mp || []);
+    const [mp, setMp] = useState(response || []);
     const [boxes, setBoxes] = useState(response?.boxes || []);
     const [drawing, setDrawing] = useState(false);
     const [startPos, setStartPos] = useState({ x: 0, y: 0 });
