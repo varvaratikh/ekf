@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import Header from './components/Header';
-import SideModalOneElement from "./components/SideModalOneElement";
 
 import ImageUploadPage from './pages/ImageUploadPage';
 import GreetingPage from "./pages/GreetingPage";
@@ -12,16 +11,10 @@ import ImageEditingPage from "./pages/ImageEditing";
 
 
 const App = () => {
-    const [isOneElementModalOpen, setOneElementIsModalOpen] = useState(false);
-
-    const handleOneElementModal = () => {
-        setOneElementIsModalOpen(!isOneElementModalOpen);
-    };
 
     return (
         <div className="bg-page">
             <div className="container mx-auto font-sans">
-                <SideModalOneElement isOpen={isOneElementModalOpen} onRequestClose={handleOneElementModal} />
                 <main>
                     <Router>
                         <Header />

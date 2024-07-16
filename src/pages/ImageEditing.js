@@ -9,56 +9,12 @@ const ImageEditing = () => {
     const { image, userId, response } = location.state || {};
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [mp, setMp] = useState(response || { boxes: [], color: [], name: [] });
-    const [drawing, setDrawing] = useState(false);
-    const [startPos, setStartPos] = useState({ x: 0, y: 0 });
-    const [currentBox, setCurrentBox] = useState(null);
-    const [isAddingBox, setIsAddingBox] = useState(false);
-    const [selectedBoxIndex, setSelectedBoxIndex] = useState(null);
     const canvasRef = useRef(null);
     const imageRef = useRef(null);
     const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
 
     const handleModal = () => {
         setIsModalOpen(!isModalOpen);
-    };
-
-    const handleMouseDown = (e) => {
-        if (!isAddingBox) return;
-        const canvas = canvasRef.current;
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        setStartPos({ x, y });
-        setDrawing(true);
-    };
-
-    const handleMouseMove = (e) => {
-        if (!drawing) return;
-        const canvas = canvasRef.current;
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const width = x - startPos.x;
-        const height = y - startPos.y;
-        setCurrentBox({ x: startPos.x, y: startPos.y, width, height });
-    };
-
-    const handleMouseUp = () => {
-        if (currentBox) {
-            const newBox = {
-                left: { x: startPos.x, y: startPos.y },
-                right: { x: startPos.x + currentBox.width, y: startPos.y + currentBox.height }
-            };
-            setMp(prevMp => ({
-                ...prevMp,
-                boxes: [...prevMp.boxes, newBox],
-                color: [...prevMp.color, 'red'],
-                name: [...prevMp.name, `Box ${prevMp.boxes.length + 1}`]
-            }));
-            setCurrentBox(null);
-            setIsAddingBox(false);
-        }
-        setDrawing(false);
     };
 
     const clearCanvas = () => {
@@ -89,16 +45,11 @@ const ImageEditing = () => {
                 (box.right.y - box.left.y) * scaleY
             );
         });
-
-        if (currentBox) {
-            context.strokeStyle = 'black';
-            context.strokeRect(currentBox.x, currentBox.y, currentBox.width, currentBox.height);
-        }
     };
 
     useEffect(() => {
         draw();
-    }, [currentBox, mp]);
+    }, [mp]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -145,14 +96,6 @@ const ImageEditing = () => {
         });
     }, []);
 
-    const handleElementClick = (index) => {
-        if (selectedBoxIndex === index) {
-            setSelectedBoxIndex(null);
-        } else {
-            setSelectedBoxIndex(index);
-        }
-    };
-
     return (
         <div className="relative h-screen flex flex-col items-center justify-center bg-white">
             <div className="absolute top-2 right-1">
@@ -173,9 +116,6 @@ const ImageEditing = () => {
                 <canvas
                     ref={canvasRef}
                     className="border-2 border-black"
-                    onMouseDown={handleMouseDown}
-                    onMouseMove={handleMouseMove}
-                    onMouseUp={handleMouseUp}
                     style={{ width: imageSize.width, height: imageSize.height }}
                 />
             </div>
@@ -185,9 +125,6 @@ const ImageEditing = () => {
                 isOpen={isModalOpen}
                 onRequestClose={handleModal}
                 mp={mp}
-                onElementClick={handleElementClick}
-                selectedBoxIndex={selectedBoxIndex}
-                onAddElement={() => setIsAddingBox(true)}
             />
         </div>
     );

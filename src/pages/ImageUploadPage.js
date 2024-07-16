@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 import burger from '../images/Burger.png';
-import HistoryModalComponent from "../components/HistoryModalComponent";
 
 const ImageUploadPage = () => {
     const [uploadedFile, setUploadedFile] = useState(null);
@@ -83,14 +82,6 @@ const ImageUploadPage = () => {
 
     return (
         <div className="relative flex flex-col items-center justify-center h-screen text-custom-black font-semibold text-lg">
-            <div className="absolute top-2 right-1">
-                <img
-                    src={burger}
-                    alt="Open Modal"
-                    className="w-8 h-5 cursor-pointer"
-                    onClick={handelModal}
-                />
-            </div>
             {uploadedFile ? (
                 <div className="w-4/6 flex flex-col items-center justify-center mt-8 mb-10">
                     <div className="relative">
@@ -119,8 +110,6 @@ const ImageUploadPage = () => {
             )}
 
             <button onClick={handleSend} className="bg-custom-grey py-2 px-40 cursor-pointer mb-10">Отправить</button>
-
-            <HistoryModalComponent isOpen={isModalOpen} onRequestClose={handelModal} images={images} />
         </div>
     );
 };

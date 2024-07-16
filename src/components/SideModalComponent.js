@@ -1,11 +1,10 @@
 import React from 'react';
 import Element from '../components/Element';
 
-const SideModalComponent = ({ isOpen, onRequestClose, mp, onElementClick, selectedBoxIndex, onAddElement }) => {
+const SideModalComponent = ({ isOpen, onRequestClose, mp }) => {
     const items = mp ? mp.boxes.map((box, index) => ({
         color: mp.color[index] || 'red',
         text: mp.name[index] || `Box ${index + 1}`,
-        index: index // Add index to the item for identification
     })) : [];
 
     return (
@@ -19,15 +18,7 @@ const SideModalComponent = ({ isOpen, onRequestClose, mp, onElementClick, select
                     </button>
                 </div>
                 <div className="flex-grow overflow-y-auto">
-                    <Element items={items} onElementClick={onElementClick} selectedBoxIndex={selectedBoxIndex} />
-                </div>
-                <div className="flex justify-center mt-4">
-                    <button
-                        className="p-2 bg-custom-grey text-custom-black"
-                        onClick={onAddElement}
-                    >
-                        Добавить элемент
-                    </button>
+                    <Element items={items} />
                 </div>
             </div>
         </div>
