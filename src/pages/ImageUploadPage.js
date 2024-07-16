@@ -64,7 +64,7 @@ const ImageUploadPage = () => {
         formData.append('image', uploadedFile);
 
         try {
-            const response = await axios.post('https://193.124.33.166:8091/image', formData, {
+            const response = await axios.post('https://193.124.33.166:8094/image', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -106,8 +106,8 @@ const ImageUploadPage = () => {
                     </div>
                 </div>
             ) : (
-                <div {...getRootProps({ className: 'dropzone' })} className={`w-4/6 h-1/2 border-3 border-dashed 
-          ${isDragActive ? 'border-custom-red' : 'border-custom-blue'} flex items-center justify-center mt-8 mb-10 
+                <div {...getRootProps({ className: 'dropzone' })} className={`w-4/6 h-1/2 border-3 border-dashed
+          ${isDragActive ? 'border-custom-red' : 'border-custom-blue'} flex items-center justify-center mt-8 mb-10
           border-custom-blue hover:border-custom-red hover:cursor-pointer`}>
                     <input {...getInputProps()} />
                     {
@@ -126,3 +126,4 @@ const ImageUploadPage = () => {
 };
 
 export default ImageUploadPage;
+
