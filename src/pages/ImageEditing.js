@@ -185,7 +185,7 @@ const ImageEditing = () => {
                 isOpen={isModalOpen}
                 onRequestClose={handleModal}
                 mp={mp}
-                onElementClick={handleElementClick} // Pass the click handler
+                onElementClick={handleElementClick}
                 selectedBoxIndex={selectedBoxIndex}
                 onAddElement={() => setIsAddingBox(true)}
             />
