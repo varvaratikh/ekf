@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import DownloadCSV from "../components/DownloadCSV";
 import SideModalComponent from '../components/SideModalComponent';
@@ -8,17 +8,17 @@ const ImageEditing = () => {
     const location = useLocation();
     const { image, userId, response } = location.state || {};
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [mp, setMp] = useState(response || []);
-    const [boxes, setBoxes] = useState(response?.boxes || []);
+    const [mp, setMp] = useState(response || { boxes: [], color: [], name: [] });
     const [drawing, setDrawing] = useState(false);
     const [startPos, setStartPos] = useState({ x: 0, y: 0 });
     const [currentBox, setCurrentBox] = useState(null);
     const [isAddingBox, setIsAddingBox] = useState(false);
+    const [selectedBoxIndex, setSelectedBoxIndex] = useState(null); // Track selected box index
     const canvasRef = useRef(null);
     const imageRef = useRef(null);
     const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
 
-    const handelModal = () => {
+    const handleModal = () => {
         setIsModalOpen(!isModalOpen);
     };
 
@@ -45,9 +45,16 @@ const ImageEditing = () => {
 
     const handleMouseUp = () => {
         if (currentBox) {
-            const newBox = { x: startPos.x, y: startPos.y, width: currentBox.width, height: currentBox.height };
-            setBoxes(prevBoxes => [...prevBoxes, newBox]);
-            setMp(prevMp => [...prevMp, newBox]);
+            const newBox = {
+                left: { x: startPos.x, y: startPos.y },
+                right: { x: startPos.x + currentBox.width, y: startPos.y + currentBox.height }
+            };
+            setMp(prevMp => ({
+                ...prevMp,
+                boxes: [...prevMp.boxes, newBox],
+                color: [...prevMp.color, 'red'], // Default color
+                name: [...prevMp.name, `Box ${prevMp.boxes.length + 1}`] // Default name
+            }));
             setCurrentBox(null);
             setIsAddingBox(false);
         }
@@ -67,10 +74,22 @@ const ImageEditing = () => {
         if (imageRef.current) {
             context.drawImage(imageRef.current, 0, 0, canvas.width, canvas.height);
         }
-        boxes.forEach((box, index) => {
-            context.strokeStyle = response.color[index] || 'black';
-            context.strokeRect(box.x, box.y, box.width, box.height);
+
+        // Calculate the scaling factors
+        const { naturalWidth, naturalHeight } = imageRef.current;
+        const scaleX = canvas.width / naturalWidth;
+        const scaleY = canvas.height / naturalHeight;
+
+        mp.boxes.forEach((box, index) => {
+            context.strokeStyle = mp.color[index] || 'red';
+            context.strokeRect(
+                box.left.x * scaleX,
+                box.left.y * scaleY,
+                (box.right.x - box.left.x) * scaleX,
+                (box.right.y - box.left.y) * scaleY
+            );
         });
+
         if (currentBox) {
             context.strokeStyle = 'black';
             context.strokeRect(currentBox.x, currentBox.y, currentBox.width, currentBox.height);
@@ -79,39 +98,60 @@ const ImageEditing = () => {
 
     useEffect(() => {
         draw();
-    }, [image, boxes, currentBox]);
+    }, [currentBox, mp]);
 
     useEffect(() => {
-        const handleResize = () => {
-            if (imageRef.current) {
-                const canvas = canvasRef.current;
-                const { naturalWidth, naturalHeight } = imageRef.current;
-                const aspectRatio = naturalWidth / naturalHeight;
-                const maxWidth = window.innerWidth * 0.65;
-                const maxHeight = window.innerHeight * 0.65;
-                let width = maxWidth;
-                let height = maxHeight;
+        const canvas = canvasRef.current;
+        const context = canvas.getContext('2d');
 
-                if (maxWidth / maxHeight > aspectRatio) {
-                    width = maxHeight * aspectRatio;
-                } else {
-                    height = maxWidth / aspectRatio;
-                }
+        // Ensure imageRef.current is properly referenced
+        const { naturalWidth, naturalHeight } = imageRef.current;
+        const aspectRatio = naturalWidth / naturalHeight;
 
-                setImageSize({ width, height });
-                canvas.width = width;
-                canvas.height = height;
-                draw();
-            }
-        };
-        handleResize();
-        window.addEventListener('resize', handleResize);
+        // Calculate maximum dimensions based on window size
+        const maxWidth = window.innerWidth * 0.65;
+        const maxHeight = window.innerHeight * 0.65;
+        let width = maxWidth;
+        let height = maxHeight;
 
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
+        // Adjust width or height to maintain aspect ratio
+        if (maxWidth / maxHeight > aspectRatio) {
+            width = maxHeight * aspectRatio;
+        } else {
+            height = maxWidth / aspectRatio;
+        }
 
+        // Set canvas size
+        setImageSize({ width, height });
+        canvas.width = width;
+        canvas.height = height;
+
+        // Draw the image
+        context.drawImage(imageRef.current, 0, 0, width, height);
+
+        // Calculate the scaling factors
+        const scaleX = width / naturalWidth;
+        const scaleY = height / naturalHeight;
+
+        // Draw other boxes on top of the image
+        mp.boxes.forEach((box, index) => {
+            context.strokeStyle = mp.color[index] || 'red';
+            context.strokeRect(
+                box.left.x * scaleX,
+                box.left.y * scaleY,
+                (box.right.x - box.left.x) * scaleX,
+                (box.right.y - box.left.y) * scaleY
+            );
+        });
+    }, []); // Empty dependency array means this effect runs once on mount
+
+    const handleElementClick = (index) => {
+        if (selectedBoxIndex === index) {
+            setSelectedBoxIndex(null); // Deselect if already selected
+        } else {
+            setSelectedBoxIndex(index); // Select the clicked box
+        }
+    };
 
     return (
         <div className="relative h-screen flex flex-col items-center justify-center bg-white">
@@ -120,7 +160,7 @@ const ImageEditing = () => {
                     src={burger}
                     alt="Open Modal"
                     className="w-8 h-5 cursor-pointer"
-                    onClick={handelModal}
+                    onClick={handleModal}
                 />
             </div>
             <div className="relative">
@@ -143,14 +183,11 @@ const ImageEditing = () => {
             <DownloadCSV mp={mp} />
             <SideModalComponent
                 isOpen={isModalOpen}
-                onRequestClose={handelModal}
+                onRequestClose={handleModal}
                 mp={mp}
-                selectedBox={null}
-                onBoxUpdate={null}
-                onBoxDelete={null}
-                onAddElement={() => {
-                    setIsAddingBox(true);
-                }}
+                onElementClick={handleElementClick} // Pass the click handler
+                selectedBoxIndex={selectedBoxIndex}
+                onAddElement={() => setIsAddingBox(true)}
             />
         </div>
     );

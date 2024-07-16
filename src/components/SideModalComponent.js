@@ -1,15 +1,15 @@
 import React from 'react';
 import Element from '../components/Element';
 
-const SideModalComponent = ({ isOpen, onRequestClose, mp, selectedBox, onBoxUpdate, onBoxDelete, onAddElement }) => {
-    const items = mp ? Object.entries(mp).map(([key, value], index) => ({
-        color: 'red',
-        text: `${key}: ${value}`
+const SideModalComponent = ({ isOpen, onRequestClose, mp, onElementClick, selectedBoxIndex, onAddElement }) => {
+    const items = mp ? mp.boxes.map((box, index) => ({
+        color: mp.color[index] || 'red',
+        text: mp.name[index] || `Box ${index + 1}`,
+        index: index // Add index to the item for identification
     })) : [];
-console.log(mp)
+
     return (
-        <div className={`fixed top-10 right-0 bg-white shadow-lg transition-transform duration-300 
-      ${isOpen ? 'translate-x-0' : 'translate-x-full'}`} style={{ width: '278px', height: '700px', margin: `10px ${isOpen ? '20px' : '0'}`, overflowY: 'auto' }}>
+        <div className={`fixed top-10 right-0 bg-white shadow-lg transition-transform duration-300 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`} style={{ width: '278px', height: '700px', margin: `10px ${isOpen ? '20px' : '0'}`, overflowY: 'auto' }}>
             <div className="flex flex-col h-full p-8">
                 <div className="flex justify-start">
                     <button onClick={onRequestClose} className="p-1 focus:outline-none relative" style={{ top: '-15px', left: '-15px' }}>
@@ -19,7 +19,7 @@ console.log(mp)
                     </button>
                 </div>
                 <div className="flex-grow overflow-y-auto">
-                    <Element items={items} />
+                    <Element items={items} onElementClick={onElementClick} selectedBoxIndex={selectedBoxIndex} />
                 </div>
                 <div className="flex justify-center mt-4">
                     <button
@@ -35,13 +35,3 @@ console.log(mp)
 };
 
 export default SideModalComponent;
-
-
-
-
-
-
-
-
-
-

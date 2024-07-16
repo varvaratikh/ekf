@@ -1,37 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const Element = ({ items }) => {
-    const [selectedItems, setSelectedItems] = useState([]);
-
-    const handleClick = (item) => {
-        const selectedIndex = selectedItems.findIndex(selectedItem => selectedItem.text === item.text);
-
-        if (selectedIndex === -1) {
-            setSelectedItems([...selectedItems, item]);
-        } else {
-            const updatedItems = [...selectedItems];
-            updatedItems.splice(selectedIndex, 1);
-            setSelectedItems(updatedItems);
-        }
-    };
-
-    const isSelected = (item) => {
-        return selectedItems.some(selectedItem => selectedItem.text === item.text);
-    };
-
+const Element = ({ items, onElementClick, selectedBoxIndex }) => {
     return (
         <div className="flex flex-col">
             {items.map((item, index) => (
                 <div
                     key={index}
-                    onClick={() => handleClick(item)}
-                    className={`flex items-center p-2 my-2 cursor-pointer border ${isSelected(item) ? 'border-custom-black' : 'border-gray-300'}`}
+                    onClick={() => onElementClick(item.index)}
+                    className={`flex items-center p-4 my-2 rounded cursor-pointer border ${selectedBoxIndex === item.index ? 'border-black' : 'border-gray-300'}`}
                 >
                     <div
-                        className="w-4 h-4 mr-2"
-                        style={{ backgroundColor: item.color }} // Set default color to red
+                        className="w-6 h-6 mr-2"
+                        style={{ backgroundColor: item.color }} // Use the color from item
                     />
-                    <div className="flex-1 text-sm">
+                    <div className="flex-1">
                         {item.text}
                     </div>
                 </div>
@@ -41,5 +23,3 @@ const Element = ({ items }) => {
 };
 
 export default Element;
-
-
