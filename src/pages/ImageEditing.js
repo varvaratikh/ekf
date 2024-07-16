@@ -13,17 +13,17 @@ const ImageEditing = () => {
     const [drawing, setDrawing] = useState(false);
     const [startPos, setStartPos] = useState({ x: 0, y: 0 });
     const [currentBox, setCurrentBox] = useState(null);
+    const [isAddingBox, setIsAddingBox] = useState(false);
     const canvasRef = useRef(null);
     const imageRef = useRef(null);
     const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
-    const [canDraw, setCanDraw] = useState(false);
 
     const handelModal = () => {
         setIsModalOpen(!isModalOpen);
     };
 
     const handleMouseDown = (e) => {
-        if (!canDraw) return;
+        if (!isAddingBox) return;
         const canvas = canvasRef.current;
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -33,7 +33,7 @@ const ImageEditing = () => {
     };
 
     const handleMouseMove = (e) => {
-        if (!drawing || !canDraw) return;
+        if (!drawing) return;
         const canvas = canvasRef.current;
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -44,14 +44,14 @@ const ImageEditing = () => {
     };
 
     const handleMouseUp = () => {
-        if (currentBox && canDraw) {
+        if (currentBox) {
             const newBox = { x: startPos.x, y: startPos.y, width: currentBox.width, height: currentBox.height };
-            setBoxes(prevBoxes => Array.isArray(prevBoxes) ? [...prevBoxes, newBox] : [newBox]);
-            setMp(prevMp => Array.isArray(prevMp) ? [...prevMp, newBox] : [newBox]);
+            setBoxes(prevBoxes => [...prevBoxes, newBox]);
+            setMp(prevMp => [...prevMp, newBox]);
             setCurrentBox(null);
+            setIsAddingBox(false);
         }
         setDrawing(false);
-        setCanDraw(false);
     };
 
     const clearCanvas = () => {
@@ -67,8 +67,8 @@ const ImageEditing = () => {
         if (imageRef.current) {
             context.drawImage(imageRef.current, 0, 0, canvas.width, canvas.height);
         }
-        boxes.forEach(box => {
-            context.strokeStyle = 'black';
+        boxes.forEach((box, index) => {
+            context.strokeStyle = response.color[index] || 'black';
             context.strokeRect(box.x, box.y, box.width, box.height);
         });
         if (currentBox) {
@@ -106,40 +106,16 @@ const ImageEditing = () => {
         };
         handleResize();
         window.addEventListener('resize', handleResize);
+
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    }, [image]);
-
-    useEffect(() => {
-        if (imageRef.current && image) {
-            const img = new Image();
-            img.src = image;
-            img.onload = () => {
-                const aspectRatio = img.naturalWidth / img.naturalHeight;
-                const maxWidth = window.innerWidth * 0.65;
-                const maxHeight = window.innerHeight * 0.65;
-                let width = maxWidth;
-                let height = maxHeight;
-
-                if (maxWidth / maxHeight > aspectRatio) {
-                    width = maxHeight * aspectRatio;
-                } else {
-                    height = maxWidth / aspectRatio;
-                }
-
-                setImageSize({ width, height });
-                canvasRef.current.width = width;
-                canvasRef.current.height = height;
-                draw();
-            };
-        }
-    }, [image]);
+    }, []);
 
 
     return (
-        <div className="relative flex flex-col items-center justify-center h-screen text-custom-black font-semibold text-lg">
-            <div className="absolute top-1.5 right-0">
+        <div className="relative h-screen flex flex-col items-center justify-center bg-white">
+            <div className="absolute top-2 right-1">
                 <img
                     src={burger}
                     alt="Open Modal"
@@ -147,38 +123,37 @@ const ImageEditing = () => {
                     onClick={handelModal}
                 />
             </div>
-            {image ? (
-                <div className="w-4/6 flex flex-col items-center justify-center mt-8 mb-10 relative">
-                    <img
-                        ref={imageRef}
-                        src={image}
-                        alt="Uploaded file"
-                        style={{ display: 'none' }}
-                    />
-                    <canvas
-                        ref={canvasRef}
-                        width={imageSize.width}
-                        height={imageSize.height}
-                        onMouseDown={handleMouseDown}
-                        onMouseMove={handleMouseMove}
-                        onMouseUp={handleMouseUp}
-                        style={{ border: '1px solid black' }}
-                    />
-                </div>
-            ) : (
-                <p>No image uploaded</p>
-            )}
-            {userId && response && (
-                <div>
-                    <p>User ID: {userId}</p>
-                    <pre>{JSON.stringify(response, null, 2)}</pre>
-                </div>
-            )}
-            <DownloadCSV/>
-            <SideModalComponent isOpen={isModalOpen} onRequestClose={handelModal} mp={mp} onAddElement={() => setCanDraw(true)} />
+            <div className="relative">
+                <img
+                    ref={imageRef}
+                    src={image}
+                    alt="Image to edit"
+                    className="hidden"
+                />
+                <canvas
+                    ref={canvasRef}
+                    className="border-2 border-black"
+                    onMouseDown={handleMouseDown}
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={handleMouseUp}
+                    style={{ width: imageSize.width, height: imageSize.height }}
+                />
+            </div>
+
+            <DownloadCSV mp={mp} />
+            <SideModalComponent
+                isOpen={isModalOpen}
+                onRequestClose={handelModal}
+                mp={mp}
+                selectedBox={null}
+                onBoxUpdate={null}
+                onBoxDelete={null}
+                onAddElement={() => {
+                    setIsAddingBox(true);
+                }}
+            />
         </div>
     );
 };
 
 export default ImageEditing;
-

@@ -2,9 +2,8 @@ import React from 'react';
 import Element from '../components/Element';
 
 const SideModalComponent = ({ isOpen, onRequestClose, mp, selectedBox, onBoxUpdate, onBoxDelete, onAddElement }) => {
-    // Generate items based on the mp object
     const items = mp ? Object.entries(mp).map(([key, value], index) => ({
-        color: 'red', // Set default color to red
+        color: 'red',
         text: `${key}: ${value}`
     })) : [];
 console.log(mp)
@@ -19,12 +18,12 @@ console.log(mp)
                         </svg>
                     </button>
                 </div>
-                <div className="flex-grow">
+                <div className="flex-grow overflow-y-auto">
                     <Element items={items} />
                 </div>
-                <div className="flex justify-center mt-auto">
+                <div className="flex justify-center mt-4">
                     <button
-                        className="absolute bottom-0 mb-4 p-2 bg-custom-grey text-custom-black"
+                        className="p-2 bg-custom-grey text-custom-black"
                         onClick={onAddElement}
                     >
                         Добавить элемент
@@ -36,3 +35,13 @@ console.log(mp)
 };
 
 export default SideModalComponent;
+
+
+
+
+
+
+
+
+
+
