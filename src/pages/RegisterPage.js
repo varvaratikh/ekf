@@ -1,6 +1,5 @@
 import React from 'react';
 import RegisterForm from "../components/RegisterForm";
-import RedRegisterButton from "../components/RedRegisterButton";
 
 
 const RegisterPage = () => {

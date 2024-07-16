@@ -13,7 +13,7 @@ const ImageEditing = () => {
     const [startPos, setStartPos] = useState({ x: 0, y: 0 });
     const [currentBox, setCurrentBox] = useState(null);
     const [isAddingBox, setIsAddingBox] = useState(false);
-    const [selectedBoxIndex, setSelectedBoxIndex] = useState(null); // Track selected box index
+    const [selectedBoxIndex, setSelectedBoxIndex] = useState(null);
     const canvasRef = useRef(null);
     const imageRef = useRef(null);
     const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
@@ -52,8 +52,8 @@ const ImageEditing = () => {
             setMp(prevMp => ({
                 ...prevMp,
                 boxes: [...prevMp.boxes, newBox],
-                color: [...prevMp.color, 'red'], // Default color
-                name: [...prevMp.name, `Box ${prevMp.boxes.length + 1}`] // Default name
+                color: [...prevMp.color, 'red'],
+                name: [...prevMp.name, `Box ${prevMp.boxes.length + 1}`]
             }));
             setCurrentBox(null);
             setIsAddingBox(false);
@@ -143,13 +143,13 @@ const ImageEditing = () => {
                 (box.right.y - box.left.y) * scaleY
             );
         });
-    }, []); // Empty dependency array means this effect runs once on mount
+    }, []);
 
     const handleElementClick = (index) => {
         if (selectedBoxIndex === index) {
-            setSelectedBoxIndex(null); // Deselect if already selected
+            setSelectedBoxIndex(null);
         } else {
-            setSelectedBoxIndex(index); // Select the clicked box
+            setSelectedBoxIndex(index);
         }
     };
 
