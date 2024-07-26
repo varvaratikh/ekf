@@ -1,2 +1,1 @@
-# ekf
-Проект, который мы с командой делали на хакатоне, организаторами которого являлись EKF.
+A project that my team and I did at a hackathon organized by EKF.
